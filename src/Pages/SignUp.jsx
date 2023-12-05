@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BsPersonCircle } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 import HomeLayout from "../Layouts/HomeLayout";
 
@@ -44,10 +45,76 @@ function Signup() {
     }
   }
 
+  function createNewAccount(event) {
+    event.preventDefault();
+    if (
+      !signupData.email ||
+      !signupData.password ||
+      !signupData.fullName ||
+      !signupData.avatar
+    ) {
+      toast.error("please fill all details");
+      return;
+    }
+
+    // name validation
+
+    if (signupData.fullName.length < 5) {
+      toast.error("Name should be atleast of 5 characters");
+      return;
+    }
+
+    //email validation
+    if (
+      !signupData.email.match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )
+    ) {
+      toast.error("Invalid email Id");
+      return;
+    }
+
+    // password validation
+
+    if (
+      !signupData.password.match(
+        /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*_)(?!.*\W)(?!.* ).{8,16}$/
+      )
+    ) {
+      toast.error(
+        "Password Should be 0-9 atleast one number one uppercase one lowercase and one special char"
+      );
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("fullName", signupData.fullName);
+    formData.append("email", signupData.email);
+    formData.append("password", signupData.password);
+    formData.append("avatar", signupData.avatar);
+
+    //  dispatch create account event
+
+    navigate("/");
+
+    setSignupData({
+      fullName: "",
+      email: "",
+      password: "",
+      avatar: "",
+    });
+
+    setPreviewImage("");
+  }
+
   return (
     <HomeLayout>
       <div className="flex overflow-x-auto items-center justify-center h-[100vh]">
-        <form className="flex flex-col justify-center gap-3 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black]">
+        <form
+          noValidate
+          onSubmit={createNewAccount}
+          className="flex flex-col justify-center gap-3 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black]"
+        >
           <h1 className="text-center text-2xl font-bold">Registration Page</h1>
 
           <label htmlFor="image_uploads" className="cursor-pointer">
