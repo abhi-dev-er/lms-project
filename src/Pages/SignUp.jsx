@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 import HomeLayout from "../Layouts/HomeLayout";
+import { createAccount } from "../Redux/Slices/AuthSlice";
 
 function Signup() {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ function Signup() {
     }
   }
 
-  function createNewAccount(event) {
+  async function createNewAccount(event) {
     event.preventDefault();
     if (
       !signupData.email ||
@@ -94,8 +95,10 @@ function Signup() {
     formData.append("avatar", signupData.avatar);
 
     //  dispatch create account event
-
+     const response = await dispatch(createAccount(formData));
+     if(response.payload.success)
     navigate("/");
+
 
     setSignupData({
       fullName: "",
