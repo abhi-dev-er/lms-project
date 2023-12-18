@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProfile } from "../../Redux/Slices/AuthSlice";
+import { getUserData, updateProfile } from "../../Redux/Slices/AuthSlice";
+import { useNavigate } from "react-router-dom";
 
 function EditProfile() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [data, setData] = useState({
     previewImage: "",
     fullName: "",
@@ -52,6 +54,8 @@ function EditProfile() {
     FormData.append("avatar", data.avatar);
 
     await dispatch(updateProfile(data.userId, data));
+    await dispatch(getUserData());
+    navigate("/user/profile");
   }
   return <div>EditProfile</div>;
 }
