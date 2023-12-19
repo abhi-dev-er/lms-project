@@ -5,7 +5,7 @@ import axiosInstence from "../../Helpers/AxiosInstence";
 export const intialState = {
   isLoggedIn: localStorage.getItem("isLoggedIn") || false,
   role: localStorage.getItem("role") || "",
-  data: JSON.parse(localStorage.getItem("data")) || {},
+  data: localStorage.getItem('data') != undefined ?  JSON.parse(localStorage.getItem("data")) : {},
 };
 
 export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
@@ -58,9 +58,9 @@ export const logout = createAsyncThunk("/auth/logout", async () => {
 
 export const updateProfile = createAsyncThunk(
   "/user/update/profile",
-  async (id, data) => {
+  async (data) => {
     try {
-      const res = axiosInstence.post(`user/update/${id}`);
+      const res = axiosInstence.put(`user/update/${data[0], data[1]}`);
       toast.promise(res, {
         loading: "wait! Profile  update in Progress....",
         success: (data) => {
@@ -77,7 +77,7 @@ export const updateProfile = createAsyncThunk(
 
 export const getUserData = createAsyncThunk("/user/details", async () => {
   try {
-    const res = axiosInstence.post("user/me");
+    const res = axiosInstence.get("user/me");
     return (await res).data;
   } catch (error) {
     toast.error(error.message);
