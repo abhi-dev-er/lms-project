@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import HomeLayout from "../../Layouts/HomeLayout";
 
 function Checkout() {
   const dispatch = useDispatch();
@@ -64,7 +65,20 @@ function Checkout() {
   useEffect(() => {
     load();
   }, []);
-  return <div>Checkout</div>;
+  return (
+    <HomeLayout>
+      <form
+        onSubmit={handleSubscription}
+        className="min-h-[90vh] flex items-center justify-center text-white"
+      >
+        <div className="w-80 h-[26rem] flex flex-col justify-center shadow-[0_0_10px_black] rounded-lg relative">
+          <h1 className="bg-yellow-500 absolute top-0 w-full text-center py-4 text-2xl font-semibold rounded-tr-lg">
+            Subscription Bundle
+          </h1>
+        </div>
+      </form>
+    </HomeLayout>
+  );
 }
 
 export default Checkout;
