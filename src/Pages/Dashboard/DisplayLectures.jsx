@@ -38,9 +38,10 @@ function DisplayLectures() {
             ></video>
             <div>
               <h1>
-                <span>
-                  
+                <span className="text-yellow-500"> Title: {" "}
                 </span>
+                  Example video
+                  {/* {lectures && lectures[currentVideo]?.title} */}
               </h1>
             </div>
           </div>
