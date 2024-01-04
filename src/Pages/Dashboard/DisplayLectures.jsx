@@ -34,7 +34,7 @@ function DisplayLectures() {
           Course Name: {state?.title}
         </div>
 
-        {lectures && {lectures.length > 0} && <div className="flex justify-center gap-10 w-full">
+        {lectures && lectures.length > 0 && <div className="flex justify-center gap-10 w-full">
           {/*left section for playing videos and displaying courses details to admin*/}
           <div className="space-y-5 w-[28rem] p-2 rounded-lg shadow-[0_0_10px_black]">
             <video
