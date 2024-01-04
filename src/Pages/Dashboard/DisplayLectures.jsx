@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import HomeLayout from "../../Layouts/HomeLayout";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getCoursesLecture } from "../../Redux/Slices/LectureSlice";
+import {
+  deleteCoursesLecture,
+  getCoursesLecture,
+} from "../../Redux/Slices/LectureSlice";
 
 function DisplayLectures() {
   const nevigate = useNavigate();
@@ -13,9 +16,11 @@ function DisplayLectures() {
 
   const [currentVideo, setCurrentVideo] = useState(0);
 
-
-  async function onlectureDelete(courseId, lectureId){
-
+  async function onlectureDelete(courseId, lectureId) {
+    await dispatch(
+      deleteCoursesLecture({ courseId: courseId, lectureId: lectureId })
+    );
+    await dispatch(getCoursesLecture(courseId));
   }
 
   useEffect(() => {
@@ -29,7 +34,7 @@ function DisplayLectures() {
           Course Name: {state?.title}
         </div>
 
-        <div className="flex justify-center gap-10 w-full">
+        {lectures && {lectures.length > 0} && <div className="flex justify-center gap-10 w-full">
           {/*left section for playing videos and displaying courses details to admin*/}
           <div className="space-y-5 w-[28rem] p-2 rounded-lg shadow-[0_0_10px_black]">
             <video
@@ -61,7 +66,7 @@ function DisplayLectures() {
             <li className="font-semibold text-xl text-yellow-500 flex items-center justify-between ">
               <p>lectures list</p>
               {role === "ADMIN" && (
-                <button className="btn-primary px-2 py-1 rounded-md font-semibold text-sm">
+                <button onClick={()=> nevigate("/course/addlecture", {state: {...state}})} className="btn-primary px-2 py-1 rounded-md font-semibold text-sm">
                   Add New Lecture
                 </button>
               )}
@@ -75,20 +80,21 @@ function DisplayLectures() {
                     className="cursor-pointer"
                     onClick={() => setCurrentVideo(index)}
                   >
-                    <span>
-                      {" "} lecture {index + 1} : {" "}
-                    </span>
+                    <span> lecture {index + 1} : </span>
                     {lecture?.title}
                   </p>
                   {role === "ADMIN" && (
-                <button onClick={()=>onlectureDelete(state?._id, lecture?._id)} className="btn-accent  px-2 py-1 rounded-md font-semibold text-sm">
-                  Add New Lecture
-                </button>
-              )}
+                    <button
+                      onClick={() => onlectureDelete(state?._id, lecture?._id)}
+                      className="btn-accent  px-2 py-1 rounded-md font-semibold text-sm"
+                    >
+                      Add New Lecture
+                    </button>
+                  )}
                 </li>
               );
             })}
-        </div>
+        </div>}
       </div>
     </HomeLayout>
   );
