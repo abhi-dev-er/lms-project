@@ -13,6 +13,11 @@ function DisplayLectures() {
 
   const [currentVideo, setCurrentVideo] = useState(0);
 
+
+  async function onlectureDelete(courseId, lectureId){
+
+  }
+
   useEffect(() => {
     if (!state) nevigate("/courses");
     dispatch(getCoursesLecture(state._id));
@@ -52,15 +57,36 @@ function DisplayLectures() {
 
           {/* { right section for displaying list of lecture} */}
 
-          <ul>
-            <li>
+          <ul className="w-[28rem] p-2 rounded-lg shadow-[0_0_10px_black] space-y-4">
+            <li className="font-semibold text-xl text-yellow-500 flex items-center justify-between ">
               <p>lectures list</p>
-              {!role === "ADMIN" && <button>Add New Lecture</button>}
+              {role === "ADMIN" && (
+                <button className="btn-primary px-2 py-1 rounded-md font-semibold text-sm">
+                  Add New Lecture
+                </button>
+              )}
             </li>
           </ul>
           {lectures &&
             lectures.map((lecture, index) => {
-              return <li key={lecture._id}></li>;
+              return (
+                <li className="space-y-2" key={lecture._id}>
+                  <p
+                    className="cursor-pointer"
+                    onClick={() => setCurrentVideo(index)}
+                  >
+                    <span>
+                      {" "} lecture {index + 1} : {" "}
+                    </span>
+                    {lecture?.title}
+                  </p>
+                  {role === "ADMIN" && (
+                <button onClick={()=>onlectureDelete(state?._id, lecture?._id)} className="btn-accent  px-2 py-1 rounded-md font-semibold text-sm">
+                  Add New Lecture
+                </button>
+              )}
+                </li>
+              );
             })}
         </div>
       </div>
