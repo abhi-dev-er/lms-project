@@ -8,7 +8,7 @@ import {
 } from "../../Redux/Slices/LectureSlice";
 
 function DisplayLectures() {
-  const nevigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { state } = useLocation();
   const { lectures } = useSelector((state) => state.lecture);
@@ -24,7 +24,7 @@ function DisplayLectures() {
   }
 
   useEffect(() => {
-    if (!state) nevigate("/courses");
+    if (!state) navigate("/courses");
     dispatch(getCoursesLecture(state._id));
   }, []);
   return (
@@ -66,7 +66,7 @@ function DisplayLectures() {
             <li className="font-semibold text-xl text-yellow-500 flex items-center justify-between ">
               <p>lectures list</p>
               {role === "ADMIN" && (
-                <button onClick={()=> nevigate("/course/addlecture", {state: {...state}})} className="btn-primary px-2 py-1 rounded-md font-semibold text-sm">
+                <button onClick={()=> navigate("/course/addlecture", {state: {...state}})} className="btn-primary px-2 py-1 rounded-md font-semibold text-sm">
                   Add New Lecture
                 </button>
               )}
