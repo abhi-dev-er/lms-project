@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import toast from "react-hot-toast";
-import axiosInstence from "../../Helpers/AxiosInstence";
+import { toast } from "react-hot-toast";
 
-export const intialState = {
+import axiosInstance from "../../Helpers/AxiosInstence";
+const initialState = {
   isLoggedIn: localStorage.getItem("isLoggedIn") || false,
   role: localStorage.getItem("role") || "",
   data:
@@ -13,13 +13,13 @@ export const intialState = {
 
 export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
   try {
-    const res = axiosInstence.post("user/register", data);
+    const res = axiosInstance.post("user/register", data);
     toast.promise(res, {
-      loading: "wait! creating Your Account",
+      loading: "Wait! creating your account",
       success: (data) => {
         return data?.data?.message;
       },
-      error: "Failed to Create Account!",
+      error: "Failed to create account",
     });
     return (await res).data;
   } catch (error) {
@@ -29,13 +29,13 @@ export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
 
 export const login = createAsyncThunk("/auth/login", async (data) => {
   try {
-    const res = axiosInstence.post("user/login", data);
+    const res = axiosInstance.post("user/login", data);
     toast.promise(res, {
-      loading: "wait! Login Your Account....",
+      loading: "Wait! authentication in progress...",
       success: (data) => {
         return data?.data?.message;
       },
-      error: "Failed to login....",
+      error: "Failed to log in",
     });
     return (await res).data;
   } catch (error) {
@@ -45,13 +45,13 @@ export const login = createAsyncThunk("/auth/login", async (data) => {
 
 export const logout = createAsyncThunk("/auth/logout", async () => {
   try {
-    const res = axiosInstence.post("user/logout");
+    const res = axiosInstance.post("user/logout");
     toast.promise(res, {
-      loading: "wait! Logout Your Account....",
+      loading: "Wait! logout in progress...",
       success: (data) => {
         return data?.data?.message;
       },
-      error: "Failed to logout....",
+      error: "Failed to log out",
     });
     return (await res).data;
   } catch (error) {
@@ -63,13 +63,13 @@ export const updateProfile = createAsyncThunk(
   "/user/update/profile",
   async (data) => {
     try {
-      const res = axiosInstence.put(`user/update/${(data[0], data[1])}`);
+      const res = axiosInstance.put(`user/update/${data[0]}`, data[1]);
       toast.promise(res, {
-        loading: "wait! Profile  update in Progress....",
+        loading: "Wait! profile update in progress...",
         success: (data) => {
           return data?.data?.message;
         },
-        error: "Failed to update profile....",
+        error: "Failed to update profile",
       });
       return (await res).data;
     } catch (error) {
@@ -80,7 +80,7 @@ export const updateProfile = createAsyncThunk(
 
 export const getUserData = createAsyncThunk("/user/details", async () => {
   try {
-    const res = axiosInstence.get("user/me");
+    const res = axiosInstance.get("user/me");
     return (await res).data;
   } catch (error) {
     toast.error(error.message);
@@ -89,7 +89,7 @@ export const getUserData = createAsyncThunk("/user/details", async () => {
 
 const authSlice = createSlice({
   name: "auth",
-  intialState,
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -108,6 +108,7 @@ const authSlice = createSlice({
         state.role = "";
       })
       .addCase(getUserData.fulfilled, (state, action) => {
+        if (!action?.payload?.user) return;
         localStorage.setItem("data", JSON.stringify(action?.payload?.user));
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("role", action?.payload?.user?.role);
@@ -118,5 +119,5 @@ const authSlice = createSlice({
   },
 });
 
-export const {} = authSlice.actions;
+// export const {} = authSlice.actions;
 export default authSlice.reducer;
