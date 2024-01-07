@@ -12,9 +12,10 @@ import React, { useEffect } from "react";
 import HomeLayout from "../../Layouts/HomeLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import getAllCourses from "../../Redux/Slices/CourseSlice"
-import getStatsData from "../../Redux/Slices/StatSlice"
-import getPaymentRecord from "../../Redux/Slices/RazorpaySlice"
+import getAllCourses from "../../Redux/Slices/CourseSlice";
+import getStatsData from "../../Redux/Slices/StatSlice";
+import getPaymentRecord from "../../Redux/Slices/RazorpaySlice";
+import deleteCourses from "../../Redux/Slices/CourseSlice";
 
 ChartJS.register(
   ArcElement,
@@ -35,27 +36,64 @@ function AdminDashboard() {
     (state) => state.razorpay
   );
 
-  const userData ={
-    levels: ["Registerd User", "Enrolled User" ],
+  const userData = {
+    levels: ["Registerd User", "Enrolled User"],
     datasets: [
       {
         label: "User Details",
         data: [allUserCount, subscribedCount],
         backgroundColor: ["yellow", "green"],
         borderWidth: 1,
-        borderColor: ["yellow", "green"]
+        borderColor: ["yellow", "green"],
+      },
+    ],
+  };
+
+  const salseData = {
+    levels: [
+      "jan",
+      "feb",
+      "march",
+      "apr",
+      "may",
+      "jun",
+      "july",
+      "aug",
+      "sep",
+      "oct",
+      "nov",
+      "dec",
+    ],
+    fontColor: "White",
+    datasets: [
+      {
+        level: "Sales / month",
+        data: monthlySalesRecord,
+        backgroundColor: ["rgb(255, 99, 132)"],
+        borderColor: ["white"],
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const myCourse = useSelector((state) => state?.course?.courseData);
+
+  async function onCourseDelete(id) {
+    if (window.confirm("are you sure you want to delete the course ? ..")) {
+      const res = await dispatch(deleteCourses(id));
+
+      if (res?.payload?.success) {
+        await dispatch(getAllCourses());
       }
-    ]
+    }
   }
-  useEffect(()=>{
-    (
-        async () => {
-            await dispatch(getAllCourses());
-            await dispatch(getStatsData());
-            await dispatch(getPaymentRecord());
-        }
-    )()
-  }, [])
+  useEffect(() => {
+    (async () => {
+      await dispatch(getAllCourses());
+      await dispatch(getStatsData());
+      await dispatch(getPaymentRecord());
+    })();
+  }, []);
   return <HomeLayout></HomeLayout>;
 }
 
