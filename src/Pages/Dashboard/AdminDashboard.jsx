@@ -9,6 +9,7 @@ import {
   Title,
 } from "chart.js";
 import React, { useEffect } from "react";
+import {FaUsers} from "react-icons/fa"
 import HomeLayout from "../../Layouts/HomeLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +40,7 @@ function AdminDashboard() {
 
   const userData = {
     levels: ["Registerd User", "Enrolled User"],
+    fontColor: "White",
     datasets: [
       {
         label: "User Details",
@@ -104,8 +106,30 @@ function AdminDashboard() {
         <div className="grid grid-cols-2 gap-5 m-auto mx-10">
           <div className="flex flex-col items-center gap-10 p-5 shadow-lg rounded-md">
             <div className="w-80 h-80">
-              <Pie  data={userData}/>
+              <Pie data={userData} />
             </div>
+
+            <div className="grid grid-cols-2 gap-5">
+              <div className="flex items-center justify-between p-5 gap-5 rounded-md shadow-md">
+                <div className="flex flex-col items-center">
+                  <p className="font-semibold">Registered Users</p>
+                  <h3 className="text-4xl font-bold">{allUserCount}</h3>
+                </div>
+                <FaUsers className="text-yellow-500 text-5xl"/>
+              </div>
+
+              <div className="flex items-center justify-between p-5 gap-5 rounded-md shadow-md">
+                <div className="flex flex-col items-center">
+                  <p className="font-semibold">Subscribed</p>
+                  <h3 className="text-4xl font-bold">{subscribedCount}</h3>
+                </div>
+                <FaUsers className="text-green-500 text-5xl"/>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center gap-10 p-5 shadow-lg shadow-md">
+
           </div>
         </div>
       </div>
