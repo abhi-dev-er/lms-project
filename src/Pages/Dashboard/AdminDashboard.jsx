@@ -16,6 +16,7 @@ import getAllCourses from "../../Redux/Slices/CourseSlice";
 import getStatsData from "../../Redux/Slices/StatSlice";
 import getPaymentRecord from "../../Redux/Slices/RazorpaySlice";
 import deleteCourses from "../../Redux/Slices/CourseSlice";
+import { Pie } from "react-chartjs-2";
 
 ChartJS.register(
   ArcElement,
@@ -94,7 +95,22 @@ function AdminDashboard() {
       await dispatch(getPaymentRecord());
     })();
   }, []);
-  return <HomeLayout></HomeLayout>;
+  return (
+    <HomeLayout>
+      <div className="min-h-[90vh] pt-5 flex flex-col flex-wrap gap-10 text-white">
+        <h1 className="text-center text-5xl font-semibold text-yellow-500">
+          Admin Dashboard
+        </h1>
+        <div className="grid grid-cols-2 gap-5 m-auto mx-10">
+          <div className="flex flex-col items-center gap-10 p-5 shadow-lg rounded-md">
+            <div className="w-80 h-80">
+              <Pie  data={userData}/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </HomeLayout>
+  );
 }
 
 export default AdminDashboard;
