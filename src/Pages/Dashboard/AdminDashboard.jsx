@@ -20,6 +20,7 @@ import getStatsData from "../../Redux/Slices/StatSlice";
 import getPaymentRecord from "../../Redux/Slices/RazorpaySlice";
 import deleteCourses from "../../Redux/Slices/CourseSlice";
 import { Bar, Pie } from "react-chartjs-2";
+import { BsCollectionPlayFill, BsTrash } from "react-icons/bs";
 
 ChartJS.register(
   ArcElement,
@@ -36,7 +37,7 @@ function AdminDashboard() {
 
   const { allUserCount, subscribedCount } = useSelector((state) => state.stat);
 
-  const { allPayments, finalMonths, monthlySalesRecord } = useSelector(
+  const { allPayments, monthlySalesRecord } = useSelector(
     (state) => state.razorpay
   );
 
@@ -171,6 +172,64 @@ function AdminDashboard() {
               Create New Course
             </button>
           </div>
+
+          <table className="table overflow-x-scroll">
+            <thead>
+              <tr>
+                <th>S No</th>
+                <th>Course Title</th>
+                <th>Course Category</th>
+                <th>Instructor</th>
+                <th>Total Lectures</th>
+                <th>Description</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {myCourse?.map((course, idx) => {
+                return (
+                  <tr key={course._id}>
+                    <td>{idx + 1}</td>
+                    <td>
+                      <textarea
+                        readOnly
+                        value={course?.title}
+                        className="w-40 h-auto bg-transparent resize-none"
+                      ></textarea>
+                    </td>
+                    <td>{course?.category}</td>
+                    <td>{course?.createdBy}</td>
+                    <td>{course?.numberOfLectures}</td>
+                    <td className="max-w-28 overflow-hidden text-ellipsis whitespace-nowrap">
+                      <textarea
+                        value={course?.description}
+                        readOnly
+                        className="w-80 h-auto bg-transparent resize-none"
+                      ></textarea>
+                    </td>
+                    <td className="flex items-center gap-4">
+                      <button
+                        onClick={() =>
+                          navigate("/course/displaylectures", {
+                            state: { ...course },
+                          })
+                        }
+                        className="bg-green-500 hover:bg-green-600 transition-all ease-in-out duration-300 text-xl py-2 px-4 rounded-md font-bold"
+                      >
+                        <BsCollectionPlayFill />
+                      </button>
+                      <button
+                       onClick={() => onCourseDelete(course?._id)}
+                        className="bg-red-500 hover:bg-red-600 transition-all ease-in-out duration-300 text-xl py-2 px-4 rounded-md font-bold"
+                      >
+                        <BsTrash />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
     </HomeLayout>
